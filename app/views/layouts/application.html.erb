@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QuineProj</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/cosmo/bootstrap.min.css">
+</head>
+<body>
+	<div class='container' style='max-width: 700px;'>
+		<div class="header">
+			<h2 class="text-center" style="padding-top: 1em; padding-bottom: 1em;">Quine McClusky's Algorithm
+				<br><small>By Ahmed Agiza & Yehia Abo El-Nga</small></h2>
+		</div>
+		<%= yield %>
+
+	</div>
+</body>
+</html>

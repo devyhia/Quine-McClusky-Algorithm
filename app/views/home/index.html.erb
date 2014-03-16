@@ -1,0 +1,133 @@
+<style type="text/css">
+.highlight {background: #fffccc;}
+</style>
+<div class="jumbotron">
+	<h1>Calculate Minimum Cost</h1>
+	<form action="/" method="post">
+	<%= form_tag url: '/', method: 'POST' do %>
+		<p class="lead">
+			<div>
+				<input type='text' name='mins' placeholder='Minterms' class='form-control input-lg'>
+			</div>
+			<div style="margin-top: 0.5em">
+				<input type='text' name='dcs' placeholder="Don't Cares" class='form-control input-lg'>
+			</div>
+		</p>
+		<p>
+			<button type='submit' class="btn btn-lg btn-primary">Go Ahead!</button>
+		</p>
+	<% end %>
+</div>
+<% if @res %>
+<div>
+	<h1>Solution: </h1>
+</div>
+<div>
+	<table class='table table-hover table-striped'>
+		<tr>
+			<% @res["columns"].each do |k, v| %>
+			<th>Column <%= k %></th>
+			<% end %>
+		</tr>
+		<tr>
+			<% @res["columns"].each do |k, v| %>
+			<td>
+				<%v.each do |line|%>
+				<% minterm = line.split('  ') %>
+				<b>
+					<%= minterm[0] %>
+					<span class="<%= minterm[1].include?('*') ? "highlight" : "" %>" style='color: #cc2e22;'>&nbsp;<%= minterm[1] %>&nbsp;</span>
+				</b><br>
+				<% end %>
+			</td>
+			<% end %>
+		</tr>
+	</table>
+</div>
+<hr>
+<div>
+	<h3>Prime Implicants</h3>
+</div>
+<div>
+	<h2 class='text-center'><span class='highlight'>&nbsp;<%= @res["pi"] %>&nbsp;</span></h2>
+</div>
+<hr>
+<!-- <div>
+	<h3>Essential Prime Implicants</h3>
+</div>
+<div>
+	<% @res["essential_pi"].each do |epi| %>
+	<h4><%= epi %></h4>
+	<% end %>
+</div> -->
+<div>
+	<h3>Chart</h3>
+</div>
+<div >
+	<table class='table table-hover table-striped'>
+		<tr>
+			<% @res["chart"][0].split(',').each do |v| %>
+			<th><%= v %></th>
+			<% end %>
+		</tr>
+		<% (1..@res["chart"].length-1).each do |i| %>
+		<tr>
+			<% @res["chart"][i].split(',').each do |m| %>
+			<td><%= m %></td>
+			<% end %>
+		</tr>
+		<% end %>
+	</table>
+</div>
+<hr>
+<div>
+	<h3>Chart <small>After Eliminating PIs</small></h3>
+</div>
+<div >
+	<table class='table table-hover table-striped'>
+		<tr>
+			<% @res["chart_after_epi"][0].split(',').each do |v| %>
+			<th><%= v %></th>
+			<% end %>
+		</tr>
+		<% (1..@res["chart_after_epi"].length-1).each do |i| %>
+		<tr>
+			<% @res["chart_after_epi"][i].split(',').each do |m| %>
+			<td><%= m %></td>
+			<% end %>
+		</tr>
+		<% end %>
+	</table>
+</div>
+<hr>
+<div>
+	<h3>Chart <small>After Dominating Rows</small></h3>
+</div>
+<div >
+	<table class='table table-hover table-striped'>
+		<tr>
+			<% @res["chart_after_dr"][0].split(',').each do |v| %>
+			<th><%= v %></th>
+			<% end %>
+		</tr>
+		<% (1..@res["chart_after_dr"].length-1).each do |i| %>
+		<tr>
+			<% @res["chart_after_dr"][i].split(',').each do |m| %>
+			<td><%= m %></td>
+			<% end %>
+		</tr>
+		<% end %>
+	</table>
+</div>
+<hr>
+<div>
+	<h3>Reduced Function</h3>
+</div>
+<div>
+	<h2 class='text-center'><span class='highlight'>&nbsp;<%= @res["reduced_function"] %>&nbsp;</span></h2>
+</div>
+<hr>
+<div style="padding-bottom: 2em;">
+	<h3 class='text-center'>Tada! That's it.</h3>
+</div>
+<% end %>
