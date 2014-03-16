@@ -1,9 +1,8 @@
 Quine McClusky Algorithm
-==========================
 
 This is CSCE 230 Digital Design Optimization algorithm of Quine McClusky with Dr. Mohamed Shalan.
 
-## Technology
+Technology
 - C ( For Ruby Extension )
 - C++ ( For the algorithm )
 - Ruby on Rails
