@@ -16,6 +16,7 @@
 using namespace std;
 using namespace Rice;
 
+/* Minterm.h */
 class minterm
 {
 	public:
@@ -96,6 +97,7 @@ bool operator<(minterm min, int a);
 bool operator>(int a, minterm min);
 bool operator>(minterm min, int a);
 
+/* Minterm.cpp */
 string toBin (int dec) //Decimal to Binary converter.
 {
 	if (dec == 0) return "0";
@@ -310,6 +312,7 @@ bool operator>(int a, minterm min) {return (a > min.getVal());}
 bool operator>(minterm min, int a) {return (min.getVal() > a);}
 bool operator>(minterm a, minterm min) {return (a.val > min.val);}
 
+/* Quine McClusky Implementation (Main.cpp) */
 bool mintExist(vector <minterm> vect, minterm min)
 {
 	for (int i = 0; i < vect.size(); i++)
