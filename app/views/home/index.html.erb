@@ -1,5 +1,16 @@
 <style type="text/css">
 .highlight {background: #fffccc;}
+.log {
+	background: #f5f5f5;
+}
+
+#log p {
+	border-bottom: dashed 1px #eee;
+	/*line-height: 2em;*/
+	padding-bottom: 1em;
+	padding-top: 1em;
+	margin: 0;
+}
 </style>
 <div class="jumbotron">
 	<h1>Calculate Minimum Cost</h1>
@@ -52,14 +63,6 @@
 	<h2 class='text-center'><span class='highlight'>&nbsp;<%= @res["pi"] %>&nbsp;</span></h2>
 </div>
 <hr>
-<!-- <div>
-	<h3>Essential Prime Implicants</h3>
-</div>
-<div>
-	<% @res["essential_pi"].each do |epi| %>
-	<h4><%= epi %></h4>
-	<% end %>
-</div> -->
 <div>
 	<h3>Chart</h3>
 </div>
@@ -80,25 +83,56 @@
 	</table>
 </div>
 <hr>
+<% @res["iterations"].each do |c, itr| %>
+<div class='text-center'>
+	<h3>Iteration # <%= c %></h3>
+</div>
+<% if !itr["chart_after_epi"] && !itr["chart_after_dr"] && !itr["chart_after_dc"] && itr["essential_pi"].length <= 0 %>
+<div class='text-center'>
+	<h4 style='color: #a0a0a0;'><i>All Minterms were covered!</i></h4>
+</div>
+<% end %>
+<% if itr["essential_pi"].count %>
+<div>
+	<h3>Essential Prime Implicants</h3>
+</div>
+<hr>
+<div>
+	<% itr["essential_pi"].each do |epi| %>
+	<h4>
+		<% minterm = epi.split('  ') %>
+		<b>
+			<%= minterm[0] %>
+			<span class="<%= minterm[1].include?('*') ? "highlight" : "" %>" style='color: #cc2e22;'>&nbsp;<%= minterm[1] %>&nbsp;</span>
+		</b><br>
+	</h4>
+	<% end %>
+</div>
+<hr>
+<% end %>
+<% if itr["chart_after_epi"] %>
+<hr>
 <div>
 	<h3>Chart <small>After Eliminating PIs</small></h3>
 </div>
 <div >
 	<table class='table table-hover table-striped'>
 		<tr>
-			<% @res["chart_after_epi"][0].split(',').each do |v| %>
+			<% itr["chart_after_epi"][0].split(',').each do |v| %>
 			<th><%= v %></th>
 			<% end %>
 		</tr>
-		<% (1..@res["chart_after_epi"].length-1).each do |i| %>
+		<% (1..itr["chart_after_epi"].length-1).each do |i| %>
 		<tr>
-			<% @res["chart_after_epi"][i].split(',').each do |m| %>
+			<% itr["chart_after_epi"][i].split(',').each do |m| %>
 			<td><%= m %></td>
 			<% end %>
 		</tr>
 		<% end %>
 	</table>
 </div>
+<% end %>
+<% if itr["chart_after_dr"] %>
 <hr>
 <div>
 	<h3>Chart <small>After Dominating Rows</small></h3>
@@ -106,19 +140,43 @@
 <div >
 	<table class='table table-hover table-striped'>
 		<tr>
-			<% @res["chart_after_dr"][0].split(',').each do |v| %>
+			<% itr["chart_after_dr"][0].split(',').each do |v| %>
 			<th><%= v %></th>
 			<% end %>
 		</tr>
-		<% (1..@res["chart_after_dr"].length-1).each do |i| %>
+		<% (1..itr["chart_after_dr"].length-1).each do |i| %>
 		<tr>
-			<% @res["chart_after_dr"][i].split(',').each do |m| %>
+			<% itr["chart_after_dr"][i].split(',').each do |m| %>
 			<td><%= m %></td>
 			<% end %>
 		</tr>
 		<% end %>
 	</table>
 </div>
+<% end %>
+<% if itr["chart_after_dc"] %>
+<hr>
+<div>
+	<h3>Chart <small>After Dominating Columns</small></h3>
+</div>
+<div >
+	<table class='table table-hover table-striped'>
+		<tr>
+			<% itr["chart_after_dc"][0].split(',').each do |v| %>
+			<th><%= v %></th>
+			<% end %>
+		</tr>
+		<% (1..itr["chart_after_dc"].length-1).each do |i| %>
+		<tr>
+			<% itr["chart_after_dc"][i].split(',').each do |m| %>
+			<td><%= m %></td>
+			<% end %>
+		</tr>
+		<% end %>
+	</table>
+</div>
+<% end %>
+<% end %>
 <hr>
 <div>
 	<h3>Reduced Function</h3>
@@ -127,7 +185,61 @@
 	<h2 class='text-center'><span class='highlight'>&nbsp;<%= @res["reduced_function"] %>&nbsp;</span></h2>
 </div>
 <hr>
-<div style="padding-bottom: 2em;">
+<div>
 	<h3 class='text-center'>Tada! That's it.</h3>
 </div>
+<hr>
+<div class='text-center' style="padding-bottom: 2em;">
+	<button 
+<button onclick="return display_log(0)" class='btn btn-xl btn-default'>But how!?</button>
+</div>
+<div id="log_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">How we got these results?</h4>
+      </div>
+      <div id="log" class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+      	<div class="pull-left"><b><i id="log_idx"></i> out of <i id='log_count'></i></b></div>
+        <button type="button" onclick="return break_interval()" class="btn btn-default">Show All</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- <div id="log">
+</div> -->
+<script type="text/javascript">
+var log = <%= raw @res["log"] %>;
+var interval = 750;
+function display_log(idx) {
+	if(idx == 0) {
+		$("#log_modal").modal('show');
+		$("#log").html("");
+		$("#log_count").text(log.length);
+		is_working = true;
+		interval = 750;
+	}
+
+	$("#log_idx").text(idx+1);
+	$("#log p").removeClass("highlight");
+	$("#log").append("<p style='display: none' class='highlight'>"+log[idx]+"</p>");
+	
+	$("#log p:last-child").fadeIn(interval, function() {
+		if(log.length > idx+1 && $('#log_modal').hasClass('in')) {
+			display_log(idx+1);
+		} else {
+			$("#log p").removeClass("highlight");
+		}
+		$("#log_modal").animate({ scrollTop: $('#log_modal')[0].scrollHeight}, interval);
+	});
+}
+
+function break_interval() {
+	interval = 50;
+}
+</script>
 <% end %>
