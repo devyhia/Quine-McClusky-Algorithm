@@ -12,12 +12,12 @@ ECHO = $(ECHO1:0=@echo)
 #### Start of system configuration section. ####
 
 srcdir = .
-topdir = /Users/devyhia/.rvm/rubies/ruby-1.9.3-p448/include/ruby-1.9.1
-hdrdir = /Users/devyhia/.rvm/rubies/ruby-1.9.3-p448/include/ruby-1.9.1
-arch_hdrdir = /Users/devyhia/.rvm/rubies/ruby-1.9.3-p448/include/ruby-1.9.1/$(arch)
+topdir = /usr/local/rvm/rubies/ruby-1.9.3-p484/include/ruby-1.9.1
+hdrdir = /usr/local/rvm/rubies/ruby-1.9.3-p484/include/ruby-1.9.1
+arch_hdrdir = /usr/local/rvm/rubies/ruby-1.9.3-p484/include/ruby-1.9.1/$(arch)
 VPATH = $(srcdir):$(arch_hdrdir)/ruby:$(hdrdir)/ruby
 
-prefix = $(DESTDIR)/Users/devyhia/.rvm/rubies/ruby-1.9.3-p448
+prefix = $(DESTDIR)/usr/local/rvm/rubies/ruby-1.9.3-p484
 
 rubylibprefix = $(libdir)/$(RUBY_BASE_NAME)
 
@@ -61,7 +61,7 @@ localstatedir = $(prefix)/var
 
 sharedstatedir = $(prefix)/com
 
-sysconfdir = $(prefix)/etc
+sysconfdir = $(DESTDIR)/etc
 
 datadir = $(datarootdir)
 
@@ -88,12 +88,12 @@ vendorarchdir = $(vendorlibdir)/$(sitearch)
 
 NULLCMD = :
 
-CC = /usr/local/bin/gcc-4.2
+CC = gcc
 CXX = g++
 LIBRUBY = $(LIBRUBY_SO)
 LIBRUBY_A = lib$(RUBY_SO_NAME)-static.a
-LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
-LIBRUBYARG_STATIC = -lruby.1.9.1-static
+LIBRUBYARG_SHARED = '-Wl,-rpath,$${ORIGIN}/../lib' -Wl,-R -Wl,$(libdir) -L$(libdir) -l$(RUBY_SO_NAME)
+LIBRUBYARG_STATIC = '-Wl,-rpath,${ORIGIN}/../lib' -Wl,-R -Wl,/usr/local/rvm/rubies/ruby-1.9.3-p484/lib -L/usr/local/rvm/rubies/ruby-1.9.3-p484/lib -lruby-static
 empty =
 OUTFLAG = -o $(empty)
 COUTFLAG = -o $(empty)
@@ -102,34 +102,34 @@ RUBY_EXTCONF_H =
 cflags   =  $(optflags) $(debugflags) $(warnflags)
 optflags = -O3
 debugflags = -ggdb
-warnflags = -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wshorten-64-to-32 -Wimplicit-function-declaration
-CFLAGS   = -fno-common $(cflags)  -fno-common -pipe $(ARCH_FLAG)
+warnflags = -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration
+CFLAGS   = -fPIC $(cflags)  -fPIC $(ARCH_FLAG)
 INCFLAGS = -I. -I$(arch_hdrdir) -I$(hdrdir)/ruby/backward -I$(hdrdir) -I$(srcdir)
 DEFS     = 
-CPPFLAGS =  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE $(DEFS) $(cppflags) -I/usr/local/opt/libyaml/include -I/usr/local/opt/readline/include -I/usr/local/opt/libksba/include -I/usr/local/opt/openssl/include -arch x86_64 -I/Users/devyhia/.rvm/gems/ruby-1.9.3-p448/gems/rice-1.6.0/ruby/lib/include
+CPPFLAGS =   $(DEFS) $(cppflags)  -I/usr/local/rvm/gems/ruby-1.9.3-p484/gems/rice-1.6.0/ruby/lib/include
 CXXFLAGS = $(CFLAGS)  -Wall -g
-ldflags  = -L.  -L/usr/local/opt/libyaml/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/libksba/lib -L/usr/local/opt/openssl/lib   -L/Users/devyhia/.rvm/gems/ruby-1.9.3-p448/gems/rice-1.6.0/ruby/lib/lib -lrice
-dldflags = -Wl,-undefined,dynamic_lookup -Wl,-multiply_defined,suppress -Wl,-flat_namespace -L/usr/local/opt/libyaml/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/libksba/lib -L/usr/local/opt/openssl/lib  
+ldflags  = -L.  -rdynamic -Wl,-export-dynamic  -L/usr/local/rvm/gems/ruby-1.9.3-p484/gems/rice-1.6.0/ruby/lib/lib -lrice
+dldflags =  
 ARCH_FLAG = 
 DLDFLAGS = $(ldflags) $(dldflags) $(ARCH_FLAG)
-LDSHARED = g++ -dynamic -bundle
-LDSHAREDXX = $(CXX) -dynamic -bundle
+LDSHARED = g++ -shared
+LDSHAREDXX = $(CXX) -shared
 AR = ar
 EXEEXT = 
 
 RUBY_BASE_NAME = ruby
 RUBY_INSTALL_NAME = ruby
-RUBY_SO_NAME = ruby.1.9.1
-arch = x86_64-darwin12.5.0
+RUBY_SO_NAME = ruby
+arch = x86_64-linux
 sitearch = $(arch)
 ruby_version = 1.9.1
-ruby = /Users/devyhia/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+ruby = /usr/local/rvm/rubies/ruby-1.9.3-p484/bin/ruby
 RUBY = $(ruby)
 RM = rm -f
 RM_RF = $(RUBY) -run -e rm -- -rf
-RMDIRS = rmdir -p
-MAKEDIRS = mkdir -p
-INSTALL = /usr/bin/install -c
+RMDIRS = rmdir --ignore-fail-on-non-empty -p
+MAKEDIRS = /bin/mkdir -p
+INSTALL = /usr/bin/install
 INSTALL_PROG = $(INSTALL) -m 0755
 INSTALL_DATA = $(INSTALL) -m 644
 COPY = cp
@@ -142,8 +142,8 @@ preload =
 
 CXX = g++
 
-libpath = . $(libdir) /usr/local/opt/libyaml/lib /usr/local/opt/readline/lib /usr/local/opt/libksba/lib /usr/local/opt/openssl/lib
-LIBPATH =  -L. -L$(libdir) -L/usr/local/opt/libyaml/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/libksba/lib -L/usr/local/opt/openssl/lib
+libpath = . $(libdir)
+LIBPATH =  -L. -L$(libdir) -Wl,-R$(libdir)
 DEFFILE = 
 
 CLEANFILES = mkmf.log
@@ -154,13 +154,13 @@ extout =
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = -lruby.1.9.1 -lpthread -ldl -lobjc 
+LIBS = '-Wl,-rpath,${ORIGIN}/../lib' -Wl,-R -Wl,/usr/local/rvm/rubies/ruby-1.9.3-p484/lib -L/usr/local/rvm/rubies/ruby-1.9.3-p484/lib -lruby -lpthread -lrt -ldl -lcrypt -lm   -lc
 SRCS = minterm.cpp
 OBJS = minterm.o
 TARGET = minterm
 TARGET_NAME = minterm
 TARGET_ENTRY = Init_$(TARGET_NAME)
-DLLIB = $(TARGET).bundle
+DLLIB = $(TARGET).so
 EXTSTATIC = 
 STATIC_LIB = 
 
@@ -172,7 +172,7 @@ HDRDIR        = $(rubyhdrdir)/ruby$(target_prefix)
 ARCHHDRDIR    = $(rubyhdrdir)/$(arch)/ruby$(target_prefix)
 
 TARGET_SO     = $(DLLIB)
-CLEANLIBS     = $(TARGET).bundle 
+CLEANLIBS     = $(TARGET).so 
 CLEANOBJS     = *.o  *.bak
 
 all:    $(DLLIB)
