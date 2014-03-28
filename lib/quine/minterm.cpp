@@ -670,9 +670,18 @@ Hash Optimize (Array rb_mins, Array rb_dcs)
 		out << endl << "Iteration # " << iterations << ":" << endl << endl << endl;
 		e_prime.clear();
 		//********Searching for essential prime implicants************
-		out << "Detecting essential prime implicants: " << endl << endl;
-		cout << endl << "-------------------------------------------" << endl;
-		cout << endl << "Essential prime implicants: " << endl;
+		if (iterations == 1)
+		{
+			out << "Detecting primary essential prime implicants: " << endl << endl;
+			cout << endl << "-------------------------------------------" << endl;
+			cout << endl << "Primary essential prime implicants: " << endl;
+		}
+		else
+		{
+			out << "Detecting secondary essential prime implicants: " << endl << endl;
+			cout << endl << "-------------------------------------------" << endl;
+			cout << endl << "Seconday essential prime implicants: " << endl;
+		}
 
 		Array arr_epi;
 
