@@ -94,7 +94,7 @@
 <% end %>
 <% if itr["essential_pi"].count %>
 <div>
-	<h3>Essential Prime Implicants</h3>
+	<h3><%= c == 1 ? "Primary" : "Secondary" %> Essential Prime Implicants</h3>
 </div>
 <hr>
 <div>
@@ -108,7 +108,6 @@
 	</h4>
 	<% end %>
 </div>
-<hr>
 <% end %>
 <% if itr["chart_after_epi"] %>
 <hr>

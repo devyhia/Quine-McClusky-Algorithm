@@ -857,7 +857,7 @@ Hash Optimize (Array rb_mins, Array rb_dcs)
 					arr_chart_after_dr.push(s);
 				}
 
-				output[String("chart_after_dr")] = arr_chart_after_dr;
+				itr[String("chart_after_dr")] = arr_chart_after_dr;
 			}
 
 			cout << endl << "-------------------------------------------" << endl;
@@ -940,7 +940,7 @@ Hash Optimize (Array rb_mins, Array rb_dcs)
 					arr_chart_after_dc.push(s);
 				}
 
-				output[String("chart_after_dc")] = arr_chart_after_dc;
+				itr[String("chart_after_dc")] = arr_chart_after_dc;
 			}
 
 			cout << endl << "-------------------------------------------" << endl;
